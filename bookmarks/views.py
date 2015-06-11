@@ -12,7 +12,7 @@ def main_page(request):
     </html>
         ''' % (
         'Django Bookmarks',
-        'Welcome to Django Bookmarks'
+        'Welcome to Django Bookmarks',
         'Where you can store and share bookmarks!'
     )
     return HttpResponse(output)
