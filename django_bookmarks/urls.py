@@ -20,4 +20,5 @@ from bookmarks.views import *
 urlpatterns = [
     url(r'^$', main_page),
     url(r'^user/(\w+)/$', user_page),
+    url(r'^login/$', 'django.contrib.auth.views.login'),
 ]
