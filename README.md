@@ -37,6 +37,8 @@ $ python manage.py makemigrations
 $ python manage.py migrate
 ```
 ### Templates: Creating a Template for the Main Page
+Most of Django configuration is done with tupples since release 1.8
+
 django_bookmarks/settings.py
 ``` Python
 TEMPLATES = [
@@ -48,6 +50,8 @@ TEMPLATES = [
 ]
 ```
 ### Putting It All Together: Generating User Pages
+the urls.py is reformed and uses a tupple of url objects.
+
 django_bookmarks/urls.py
 ``` Python
 urlpatterns = [
@@ -57,7 +61,8 @@ urlpatterns = [
 ```
 ## Chapter 4: User Registration and Management
 ### Creating the Login Page
-Creating the login page like mentioned in the book will lead to an error trying to log in. The correct template is as follows:
+Creating the login page like mentioned in the book will lead to an error trying to log in. The template is not changed much, it only needs an aditional line with `{% csrf_token %}`. 
+The correct template is as follows:
 
 templates/registration/login.html
 ``` Html

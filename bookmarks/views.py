@@ -1,9 +1,9 @@
-from django.http import HttpResponse
 from django.template import Context
 from django.template.loader import get_template
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
+from django.contrib.auth import logout
 
 
 def main_page(request):
@@ -13,6 +13,11 @@ def main_page(request):
                         'page_body': 'Where you can store and share bookmarks!',
                         'user': request.user,
                         })
+
+
+def logout_page(request):
+    logout(request)
+    return HttpResponseRedirect('/')    # return to '/' (main page)
 
 
 def user_page(request, username):
