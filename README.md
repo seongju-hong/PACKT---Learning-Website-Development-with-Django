@@ -61,11 +61,11 @@ urlpatterns = [
 ```
 ## Chapter 4: User Registration and Management
 ### Creating the Login Page
-Creating the login page like mentioned in the book will lead to an error trying to log in. The template is not changed much, it only needs an aditional line with `{% csrf_token %}`. 
+Creating the login page like mentioned in the book will lead to an error trying to log in. The template is not changed much, it only needs an additional line with `{% csrf_token %}`. 
 The correct template is as follows:
 
 templates/registration/login.html
-``` Html
+``` HTML5
 <html>
     <head>
         <title>Django Bookmarks - User Login</title>
@@ -88,3 +88,13 @@ templates/registration/login.html
     </body>
 </html>
 ```
+### Improving Template Structure
+This one is not really a fault but, because most major browsers nowadays support HTML5 it is save to change the `!DOCTYPE` tag.
+``` HTML5
+<!DOCTYPE html>
+<html>
+    ...
+</html>
+```
+
+login.html has to get added `{% csrf_token %}` again after replacing it!
