@@ -1,15 +1,26 @@
 import re
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django import forms
 
 
-
 class RegistrationForm(forms.Form):
-    username = forms.CharField(label='Username', max_length=30)
-    email = forms.EmailField(label='Email')
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput())
-    password2 = forms.CharField(label='Password (Again)', widget=forms.PasswordInput())
+    username = forms.CharField(
+        label='Username',
+        max_length=30
+    )
+    email = forms.EmailField(
+        label='Email'
+    )
+    password1 = forms.CharField(
+        label='Password',
+        widget=forms.PasswordInput()
+    )
+    password2 = forms.CharField(
+        label='Password (Again)',
+        widget=forms.PasswordInput()
+    )
 
     # password validation:
     def cleaned_password2(self):
@@ -31,3 +42,18 @@ class RegistrationForm(forms.Form):
         except ObjectDoesNotExist:
             return username
         raise forms.ValidationError('Username is already taken.')
+
+
+class BookmarkSaveForm(forms.Form):
+    url = forms.URLField(
+        label='URL',
+        widget=forms.TextInput(attrs={'size': 64})
+    )
+    title = forms.CharField(
+        label='Title',
+        widget=forms.TextInput(attrs={'size': 64})
+    )
+    tags = forms.CharField(
+        label='Tags',
+        widget=forms.TextInput(attrs={'size': 64})
+    )

@@ -195,3 +195,8 @@ urlpatterns = [
     url(r'^register/success/$', TemplateView.as_view(template_name='registration/register_success.html')),
 ]
 ```
+
+## Chapter 5: Introducing Tag
+### Creating the Bookmark Submission Form
+inside the view `bookmark_save_page` in bookmarks/views.py replace all instances of `clean_date` with `cleaned_date`. 
+Also in the template created for this view, after the opening tag of the form, insert a line with `{% csrf_token %}`. 
