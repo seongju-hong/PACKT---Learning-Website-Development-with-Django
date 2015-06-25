@@ -10,7 +10,8 @@
     <div id="nav">
         <a href="/">home</a> |
         {% if user.is_authenticated %}
-            welcome {{ user.username }}
+            <a href="/save/">submit</a> |
+
             (<a href="/logout">logout</a>)
         {% else %}
             <a href="/login/">login</a>

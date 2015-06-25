@@ -12,7 +12,7 @@ django_bookmarks/settings.py
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'bookmarksdb',
+        'NAME': os.path.join(BASE_DIR, 'bookmarksdb'),
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
@@ -37,6 +37,7 @@ class Bookmark(models.Model):
 ``` Bash
 $ python manage.py makemigrations
 $ python manage.py migrate
+$ python manage.py createsuperuser
 ```
 ### Templates: Creating a Template for the Main Page
 Most of Django configuration is done with tupples since release 1.8
@@ -46,16 +47,33 @@ django_bookmarks/settings.py
 TEMPLATES = [
     {
         ...
-        'DIRS': ['templates'],
+        [os.path.join(BASE_DIR, 'templates')],
         ...
     },
 ]
+
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR,  'templates'),
+)
 ```
 ### Putting It All Together: Generating User Pages
-the urls.py is reformed and uses a tupple of url objects.
+the urls.py is reformed and uses a tupple of url objects. 
+Also it is recommended to give each project its own urls.py file, this makes the urls files look as follows:  
 
 django_bookmarks/urls.py
 ``` Python
+from django.conf.urls import url, include
+
+urlpatterns = [
+    url(r'^', include('bookmarks.urls', namespace="bookmarks")),
+]
+```
+
+bookmarks/urls.py
+``` Python
+from django.conf.urls import url
+from views import *
+
 urlpatterns = [
     url(r'^$', main_page),
     url(r'^user/(\w+)/$', user_page),
@@ -114,12 +132,7 @@ To link to the stylesheet, edit templates/base.html like this:
 
 do not change the urls.py file like suggested but instead make sure django_bookmarks/settings.py includes next lines:
 ``` Python
-import os.path
-
-
-STATIC_ROOT = ''
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join('static'),)
 ```
 ### User Registration
 #### Designing the User Registration Form
@@ -200,3 +213,5 @@ urlpatterns = [
 ### Creating the Bookmark Submission Form
 inside the view `bookmark_save_page` in bookmarks/views.py replace all instances of `clean_date` with `cleaned_date`. 
 Also in the template created for this view, after the opening tag of the form, insert a line with `{% csrf_token %}`. 
+
+#### Restricting Access to Logged-in Users
