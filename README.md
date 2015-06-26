@@ -56,6 +56,8 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),
 )
 ```
+
+
 ### Putting It All Together: Generating User Pages
 the urls.py is reformed and uses a tupple of url objects. 
 Also it is recommended to give each project its own urls.py file, this makes the urls files look as follows:  
@@ -75,17 +77,36 @@ from django.conf.urls import url
 from views import *
 
 urlpatterns = [
-    url(r'^$', main_page),
-    url(r'^user/(\w+)/$', user_page),
+    url(r'^$', main_page, name='main'),
+    url(r'^user/(\w+)/$', user_page, name='user'),
 ]
 ```
+Notice the new name property, this will come in handy for generating hyperlinks in templates without worrying about the URL in the urlpatterns.
+
 ## Chapter 4: User Registration and Management
 ### Session Authentication
 #### Creating the Login Page
+Again we change the way urls.py looks, and note 'name='registration login' in annalogy with the folder structure we are creating in templates.
+
+bookmarks/urls.py
+``` Python
+urlpatterns = [
+    # Browsing
+    url(r'^$', main_page,
+        name='main'),
+    url(r'^user/(\w+)/$',
+        user_page,
+        name='user'),
+    url(r'^login/$',
+        'django.contrib.auth.views.login',
+        name='registration login'),
+]
+```
+
 Creating the login page like mentioned in the book will lead to an error trying to log in. The template is not changed much, it only needs an additional line with `{% csrf_token %}`. 
 The correct template is as follows:
 
-templates/registration/login.html
+bookmarks/templates/registration/login.html
 ``` HTML5
 <html>
     <head>
@@ -109,6 +130,7 @@ templates/registration/login.html
     </body>
 </html>
 ```
+
 ### Improving Template Structure
 This one is not really a fault but, because most major browsers nowadays support HTML5 it is save to change the `!DOCTYPE` tag.
 ``` HTML5
@@ -198,7 +220,7 @@ In /templates/registration/register.html, at the beginning of the `<form>`, the 
 
 django.views.generic.simple.direct_to_template does not exist anymore, instead you have to use django.views.generic.base.TemplateView:
 
-django_bookmarks/urls.py
+bookmarks/urls.py
 ``` Python
 from django.views.generic import TemplateView
 
@@ -215,3 +237,22 @@ inside the view `bookmark_save_page` in bookmarks/views.py replace all instances
 Also in the template created for this view, after the opening tag of the form, insert a line with `{% csrf_token %}`. 
 
 #### Restricting Access to Logged-in Users
+
+bookmarks/templates/base.html
+``` Python
+<div id="nav">
+    <a href="/">home</a> |
+    {% if user.is_authenticated %}
+        <a href="{% url 'bookmarks:save' %}">submit</a> |
+        <a href="{% url 'bookmarks:user' user.username %}">{{ user.username }}</a> |
+        (<a href="{%  url 'bookmarks:registration logout' %}">logout</a>)
+    {% else %}
+        <a href="{%  url 'bookmarks:registration login' %}">login</a>
+        <a href="{% url 'bookmarks:registration' %}">register</a>
+    {% endif %}
+</div>
+```
+
+After adding `@login_required` in the views, in settings.py, the next is all you should add: `LOGIN_URL = '/login/'`
+
+
